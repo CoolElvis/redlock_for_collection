@@ -9,7 +9,7 @@ class RedlockForCollectionTest < MiniTest::Test
   def test_main
     manager = RedlockForCollection::Manager.new
 
-    options = { key_method: :to_s, key_prefix: 'order', ttl: 20_000 }
+    options = { key_method: :to_s, ttl: 20_000 }
 
     Thread.new do
       manager.lock_collection(@order_ids, options: options) do |locked_objects, unlocked_objects|

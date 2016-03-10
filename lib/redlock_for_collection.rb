@@ -6,11 +6,11 @@ module RedlockForCollection
 
     DEFAULT_TTL = 10_000
     DEFAULT_MIN_VALIDITY = 5_000
-    DEFAULT_KEY_METHOD = :key
-    DEFAULT_KEY_PREFIX = :prefix
-
+    DEFAULT_KEY_METHOD = 'key'.freeze
+    DEFAULT_KEY_PREFIX = 'prefix'.freeze
 
     attr_reader :configuration
+
 
     def initialize
       @configuration = Configuration.new
