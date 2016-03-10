@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'redlock_manager/version'
+require 'redlock_for_collection/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "redlock_manager"
-  spec.version       = RedlockManager::VERSION
+  spec.name          = 'redlock_for_collection'
+  spec.version       = RedlockForCollection::VERSION
   spec.authors       = ["Evgeniy Isyanov"]
   spec.email         = ["evgeniy.isyanov@bia-tech.ru"]
 

@@ -1,7 +1,7 @@
-require_relative 'redlock_manager/version'
-require_relative 'redlock_manager/configuration'
+require_relative 'redlock_for_collection/version'
+require_relative 'redlock_for_collection/configuration'
 
-module RedlockManager
+module RedlockForCollection
   class Manager
 
     DEFAULT_TTL = 10_000

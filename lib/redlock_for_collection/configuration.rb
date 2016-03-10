@@ -1,7 +1,7 @@
 require 'connection_pool'
 require 'redlock'
 
-module RedlockManager
+module RedlockForCollection
   class Configuration
     attr_accessor :pool_size,
                   :pool_timeout,

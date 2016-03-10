@@ -1,13 +1,13 @@
 require_relative 'test_helper'
 
 
-class RedlockManagerTest < MiniTest::Test
+class RedlockForCollectionTest < MiniTest::Test
   def setup
     @order_ids = (1..100).to_a
   end
 
   def test_main
-    manager = RedlockManager::Manager.new
+    manager = RedlockForCollection::Manager.new
 
     options = { key_method: :to_s, key_prefix: 'order', ttl: 20_000 }
 
