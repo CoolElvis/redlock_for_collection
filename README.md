@@ -1,4 +1,8 @@
-# RedlockManager
+[![Build Status](https://travis-ci.org/CoolElvis/redlock_for_collection.svg?branch=master)](https://travis-ci.org/CoolElvis/redlock_for_collection)
+[![Code Climate](https://codeclimate.com/github/CoolElvis/redlock_for_collection/badges/gpa.svg)](https://codeclimate.com/github/CoolElvis/redlock_for_collection)
+[![Test Coverage](https://codeclimate.com/github/CoolElvis/redlock_for_collection/badges/coverage.svg)](https://codeclimate.com/github/CoolElvis/redlock_for_collection/coverage)
+[![Issue Count](https://codeclimate.com/github/CoolElvis/redlock_for_collection/badges/issue_count.svg)](https://codeclimate.com/github/CoolElvis/redlock_for_collection)
+# RedlockForCollection
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/redlock_manager`. To experiment with that code, run `bin/console` for an interactive prompt.
 
