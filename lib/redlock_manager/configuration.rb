@@ -23,7 +23,7 @@ module RedlockManager
     def pool
       @pool|| begin
         @pool = ConnectionPool.new(size: @pool_size, timeout: @pool_timeout) do
-          Redlock::Client.new([@redis_urls], retry_delay: @retry_delay, retry_count: @retry_count)
+          Redlock::Client.new(@redis_urls, retry_delay: @retry_delay, retry_count: @retry_count)
         end
       end
     end
