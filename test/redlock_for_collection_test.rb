@@ -1,6 +1,5 @@
 require_relative 'test_helper'
 
-
 class RedlockForCollectionTest < MiniTest::Test
   def setup
     @order_ids = (1..100).to_a
