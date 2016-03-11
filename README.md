@@ -4,16 +4,15 @@
 [![Issue Count](https://codeclimate.com/github/CoolElvis/redlock_for_collection/badges/issue_count.svg)](https://codeclimate.com/github/CoolElvis/redlock_for_collection)
 # RedlockForCollection
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/redlock_manager`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is just a Redlock wrapper for collection of objects. 
+Also it used a connection pool for restrict the redis connections. 
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'redlock_manager'
+gem 'redlock_for_collection'
 ```
 
 And then execute:
@@ -22,7 +21,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install redlock_manager
+    $ gem install redlock_for_collection
 
 ## Usage
 
@@ -36,5 +35,5 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/redlock_manager.
+Bug reports and pull requests are welcome on GitHub at https://github.com/CoolElvis/redlock_for_collection.
 
