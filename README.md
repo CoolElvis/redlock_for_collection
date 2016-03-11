@@ -28,7 +28,7 @@ Or install it yourself as:
 
 ```ruby
 collection_manager = RedlockForCollection::Manager.new
-options = { key_method: :to_s, , key_prefix: 'pref', ttl: 20_000, min_validity: 10_00}
+options = { key_method: :to_s, key_prefix: 'pref', ttl: 20_000, min_validity: 10_00}
 
 collection_manager.with_lock(objects, options: options) do |locked_objects, unlocked_objects|
     ... do some things with locked_objects
