@@ -28,6 +28,21 @@ class RedlockForCollectionTest < MiniTest::Test
 
   end
 
+  def test_configuration
+    manager = RedlockForCollection::Manager.new
+
+    manager.configure do |config|
+      config.pool_size = 2
+      config.redis_urls = ['redis://localhost:6379']
+      config.retry_delay = 2
+      config.retry_count = 2
+    end
+
+    assert_equal(manager.configuration.pool_size, 2)
+    assert_equal(manager.configuration.redis_urls, ['redis://localhost:6379'])
+    assert_equal(manager.configuration.retry_delay, 2)
+    assert_equal(manager.configuration.retry_count, 2)
+  end
 
 end
 
