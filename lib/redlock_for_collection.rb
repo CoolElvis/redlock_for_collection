@@ -14,7 +14,7 @@ module RedlockForCollection
 
     # @yields [Configuration]
     def configure(&block)
-      yield @configuration
+      block.yield @configuration
     end
 
 
