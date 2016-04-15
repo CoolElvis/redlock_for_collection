@@ -14,11 +14,10 @@ module RedlockForCollection
       @pool_size    = 5
       @pool_timeout = 5
       @redis_urls   = ['redis://localhost:6379']
-      @retry_delay  = 5
+      @retry_delay  = 50
       @retry_count  = 5
       @pool         = nil
     end
-
 
     def pool
       @pool ||= ConnectionPool.new(size: @pool_size, timeout: @pool_timeout) do

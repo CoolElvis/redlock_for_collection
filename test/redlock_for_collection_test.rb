@@ -2,29 +2,63 @@ require_relative 'test_helper'
 
 class RedlockForCollectionTest < MiniTest::Test
   def setup
-    @order_ids = (1..100).to_a
+
   end
 
   def test_main
-    manager = RedlockForCollection::Manager.new
+    manager = RedlockForCollection::Manager.new do |config|
+      config.retry_delay = 0
+      config.retry_count = 1
+    end
 
-    options = { key_method: :to_s, ttl: 20_000 }
+    options = {key_prefix: SecureRandom.base64(4), key_method: :to_s, ttl: 10_000 }
+    order_ids = (1..100).to_a
 
     Thread.new do
-      manager.with_lock(@order_ids, options: options) do |locked_objects, unlocked_objects|
-        assert_equal(locked_objects.count, 100)
-        assert_equal(unlocked_objects.count, 0)
+      manager.with_lock(order_ids, options: options) do |locked_objects, unlocked_objects|
+        assert_equal(100, locked_objects.count)
+        assert_equal(0, unlocked_objects.count)
         sleep 5
+      end
+    end
+
+    sleep 1.1
+
+    manager.with_lock(order_ids, options: options) do |locked_objects, unlocked_objects|
+      assert_equal(0, locked_objects.count)
+      assert_equal(100, unlocked_objects.count)
+    end
+
+
+  end
+
+
+  def test_only_one_slow
+    require 'securerandom'
+
+    manager = RedlockForCollection::Manager.new do |config|
+      config.retry_delay = 2000
+      config.retry_count = 2
+    end
+
+    options = { key_prefix: SecureRandom.base64(4),  key_method: :to_s, ttl: 40_000, min_validity: 38_900 }
+
+    order_ids = (1..100).to_a
+
+    Thread.new do
+      manager.with_lock([order_ids.first], options: options) do |locked_objects, unlocked_objects|
+        assert_equal(1, locked_objects.count)
+        assert_equal(0, unlocked_objects.count)
+        sleep 50
       end
     end
 
     sleep 0.1
 
-    manager.with_lock(@order_ids, options: options) do |locked_objects, unlocked_objects|
-      assert_equal(locked_objects.count, 0)
-      assert_equal(unlocked_objects.count, 100)
+    manager.with_lock(order_ids, options: options) do |locked_objects, unlocked_objects|
+      assert_equal(0, locked_objects.count)
+      assert_equal(100, unlocked_objects.count)
     end
-
   end
 
   def test_configuration
