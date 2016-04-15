@@ -34,8 +34,6 @@ class RedlockForCollectionTest < MiniTest::Test
 
 
   def test_only_one_slow
-    require 'securerandom'
-
     manager = RedlockForCollection::Manager.new do |config|
       config.retry_delay = 2000
       config.retry_count = 2
