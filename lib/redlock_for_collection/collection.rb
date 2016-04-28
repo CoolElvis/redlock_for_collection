@@ -5,6 +5,8 @@ module RedlockForCollection
     DEFAULT_KEY_METHOD = 'key'.freeze
     DEFAULT_KEY_PREFIX = 'prefix'.freeze
 
+    LockPair = Struct.new(:object, :lock_info, :status)
+
     attr_reader :objects, :options, :pool
 
     def initialize(objects, options, pool)
@@ -15,46 +17,31 @@ module RedlockForCollection
       init_options
     end
 
-
     def lock(&block)
-      locked_objects   = []
-      unlocked_objects = []
+      lock_pairs = []
 
-      locks_info         = []
-      expired_locks_info = []
-
+      start_time = (Time.now.to_f * 1000).to_i
       @objects.each do |object|
         @pool.with do |redlock|
           lock_info = redlock.lock(build_key_for(object), @options[:ttl])
-
-          # Check if ttl is enough
-          if lock_info && (lock_info[:validity] > (@options[:min_validity]))
-            locked_objects << object
-            locks_info     << lock_info
-          else
-            expired_locks_info << lock_info if lock_info
-            unlocked_objects   << object
-          end
+          lock_pairs << LockPair.new(object, lock_info)
         end
       end
+      end_time = (Time.now.to_f * 1000).to_i
+
+      separated_pairs = separate_expired_pairs(lock_pairs, end_time - start_time)
 
       begin
-        block.yield(locked_objects, unlocked_objects)
+        separated_pairs[:valid].map(&:object)
+        separated_pairs[:expired].map(&:object)
+        block.yield(separated_pairs[:valid].map(&:object), separated_pairs[:expired].map(&:object))
       ensure
         # Release the all acquired locks
-        unlock(expired_locks_info)
-        unlock(locks_info)
+        unlock(lock_pairs)
       end
     end
-
 
     protected
-
-    def unlock(locks_info)
-      @pool.with do |redlock|
-        locks_info.each { |lock_info| redlock.unlock(lock_info) }
-      end
-    end
 
     def init_options
       @options[:key_prefix]   ||= DEFAULT_KEY_PREFIX
@@ -63,8 +50,37 @@ module RedlockForCollection
       @options[:ttl]          ||= DEFAULT_TTL
     end
 
+    # @param lock_pairs [Array<LockPair>]
+    def unlock(lock_pairs)
+      @pool.with do |redlock|
+        lock_pairs.each do |lock_pair|
+          redlock.unlock(lock_pair.lock_info) if lock_pair.lock_info
+        end
+      end
+    end
+
     def build_key_for(object)
       (@options[:key_prefix]) + object.send(@options[:key_method]).to_s
+    end
+
+    # @param lock_pairs [Array<LockPair>]
+    # @param elapsed [Integer]
+    # @return [Hash]
+    def separate_expired_pairs(lock_pairs, elapsed)
+      expired_pairs = []
+      valid_pairs   = []
+
+      lock_pairs.each do |lock_pair|
+        if lock_pair.lock_info && ((lock_pair.lock_info[:validity] - elapsed) > (@options[:min_validity]))
+          lock_pair.status = :valid
+          valid_pairs << lock_pair
+        else
+          lock_pair.status= :expired
+          expired_pairs <<  lock_pair
+        end
+      end
+
+      { valid: valid_pairs, expired: expired_pairs }
     end
 
   end
