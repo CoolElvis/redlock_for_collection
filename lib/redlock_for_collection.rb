@@ -1,6 +1,7 @@
-require_relative 'redlock_for_collection/version'
-require_relative 'redlock_for_collection/configuration'
-require_relative 'redlock_for_collection/collection'
+require 'redlock_for_collection/version'
+require 'redlock_for_collection/configuration'
+require 'redlock_for_collection/locked_object'
+require 'redlock_for_collection/collection'
 
 module RedlockForCollection
   class Manager
