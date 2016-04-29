@@ -2,7 +2,6 @@ module RedlockForCollection
   class LockedObject
     attr_reader :object,
                 :lock_info,
-                :status,
                 :redlock_pool,
                 :key
 
